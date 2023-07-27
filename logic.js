@@ -5,24 +5,36 @@ const imgArray = [
   ["./PacMan5.png", "./PacMan6.png"], //up      - 2
   ["./PacMan7.png", "./PacMan8.png"], //down    - 3
 ];
-
+// ** create a variable for the direction of travel, speed, and position
 var imgwidth = 200;
 var direction = { x: 1, y: 0 }; // both values should only every be -1, 0, or 1
 var position = { x: 0, y: 0 };
 var mouthPosition = 0;
 var speed = 20;
 var pageSize = { x: window.innerWidth, y: window.innerHeight };
+var startGame = undefined;
 // at start hide the instuctions
 let instuctions = document.getElementById("startInstructions");
 
-
 function Run() {
-  //make sure we have the player
-  let img = document.getElementById("PacMan");
-
   // at start hide the instuctions
   let instuctions = document.getElementById("startInstructions");
-  instuctions.style.opacity = 0;
+
+  // Interval controls if the game is running or not
+  if (startGame == undefined) {
+    startGame = setInterval(moveBall, 150);
+    instuctions.style.opacity = 0;
+  } else {
+    clearInterval(startGame);
+    startGame = undefined;
+    instuctions.style.opacity = 1;
+  }
+}
+
+function moveBall() {
+  console.log("moveBall");
+  //make sure we have the player
+  let img = document.getElementById("PacMan");
 
   //moves the player using arrow keys from CB function
   position.x = position.x + direction.x * speed;
@@ -36,9 +48,6 @@ function Run() {
 
   //in case the player tries to get off screen
   edgeChanges();
-
-  // Use setTimeout to call Run every 200 millesecs
-  var startGame = setTimeout(Run, 150);
 }
 
 function getActiveDirection() {
@@ -54,25 +63,23 @@ function getActiveDirection() {
   }
 }
 
-function edgeChanges(){
-  let screen = { x:window.innerWidth, y:window.innerHeight };
+function edgeChanges() {
+  let screen = { x: window.innerWidth, y: window.innerHeight };
   let img = document.getElementById("PacMan");
-  
-  
 
-  if (position.x + 200 > screen.x){
+  if (position.x + 200 > screen.x) {
     direction.x = -1;
     img.src = imgArray[getActiveDirection()][0];
-  }else if (position.x < 0){
+  } else if (position.x < 0) {
     direction.x = 1;
     img.src = imgArray[getActiveDirection()][0];
-  }else if (position.y + 200 > screen.y){
+  } else if (position.y + 200 > screen.y) {
     direction.y = -1;
     img.src = imgArray[getActiveDirection()][0];
-  }else if (position.y < 0){
+  } else if (position.y < 0) {
     direction.y = 1;
     img.src = imgArray[getActiveDirection()][0];
-  }else{
+  } else {
     // do nothing
   }
 }
